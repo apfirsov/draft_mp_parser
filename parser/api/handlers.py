@@ -1,4 +1,4 @@
-from typing import List, Union, Optional
+from typing import List, Union
 
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -16,7 +16,7 @@ parser_router = APIRouter()
 
 
 async def _create_new_parse(body: ParserCreate, db) -> ShowParser:
-    async with db() as session:
+    async with db as session:
         async with session.begin():
             parser_dal = ParserDAL(session)
             parser = await parser_dal.create_parser(
@@ -59,8 +59,11 @@ async def _get_parser_for_id(prod_id, db) -> Union[ShowParser, None]:
 
 
 @parser_router.post("/", response_model=ShowParser)
-async def create_parser(body: ParserCreate) -> ShowParser:
-    return await _create_new_parse(body)
+async def create_parser(
+    body: ParserCreate,
+    db: AsyncSession = Depends(get_db)
+) -> ShowParser:
+    return await _create_new_parse(body, db)
 
 
 @parser_router.get("/", response_model=ShowParser)

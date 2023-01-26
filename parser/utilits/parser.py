@@ -50,6 +50,7 @@ async def main():
     await asyncio.wait(task)
     print(f"Time of task {int(time.time() - start)} sec")
 
-ioloop = asyncio.get_event_loop()
-ioloop.run_until_complete(main())
-ioloop.close()
+# ioloop = asyncio.get_event_loop()
+# ioloop.run_until_complete(main())
+# ioloop.close()
+asyncio.run(main())

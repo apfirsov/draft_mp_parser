@@ -7,4 +7,5 @@ router = DefaultRouter()
 router.register('phone', CustomUserViewSet, basename='phone')
 
 urlpatterns = [
-    path('', include(router.urls))]
+    path('', include(router.urls))
+]

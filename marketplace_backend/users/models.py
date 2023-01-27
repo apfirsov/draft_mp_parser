@@ -23,7 +23,6 @@ class Status(models.Model):
     )
 
 
-
 class CustomUser(AbstractBaseUser):
     login = models.CharField(
         verbose_name='Логин',
@@ -65,4 +64,3 @@ class CustomUser(AbstractBaseUser):
         verbose_name_plural = 'Пользователи'
 
     USERNAME_FIELD = 'phone_number'
-

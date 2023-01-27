@@ -32,8 +32,6 @@ def get_goods_ids(shard: str, query: str,
     for page in range(1, MAX_PAGE):
 
         def scrape_page(page: int) -> Optional[bool]:
-            nonlocal base_url
-            nonlocal current_goods_list
             items_count_at_start: int = len(current_goods_list)
             url: str = base_url + str(page)
 
@@ -69,8 +67,8 @@ def get_goods_ids(shard: str, query: str,
 if __name__ == '__main__':
     start = time.time()
     GOODS: list = []
-    shard = 'men_clothes1'
-    query = 'cat=63011'
+    shard: str = 'men_clothes1'
+    query: str = 'cat=63011'
 
     get_goods_ids(shard, query)
 

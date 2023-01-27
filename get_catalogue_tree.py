@@ -5,7 +5,7 @@ import json
 import requests
 
 
-def get_catalogue_tree(dictionary):
+def get_catalogue_tree(dictionary: dict) -> None:
     for item in dictionary:
         global RESULT
         RESULT.append({
@@ -18,15 +18,16 @@ def get_catalogue_tree(dictionary):
             'shard': item.get('shard'),
             'query': item.get('query')
         })
-        item_childs = item.get('childs')
+        item_childs: dict = item.get('childs')
         if item_childs is not None:
             get_catalogue_tree(item_childs)
 
 
 if __name__ == '__main__':
-    RESULT = []
-    catalogue_url = 'https://static-basket-01.wb.ru/vol0/data/main-menu-ru-ru-v2.json'
-    response = requests.get(catalogue_url).json()
+    RESULT: list = []
+    catalogue_url: str = ('https://static-basket-01.wb.ru/vol0/'
+                          'data/main-menu-ru-ru-v2.json')
+    response: dict = requests.get(catalogue_url).json()
 
     get_catalogue_tree(response)
 

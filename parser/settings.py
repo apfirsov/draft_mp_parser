@@ -1,9 +1,10 @@
 """File with settings and configs for the project"""
-from envparse import Env
+import os
+from dotenv import load_dotenv
 
-env = Env()
+load_dotenv()
 
-REAL_DATABASE_URL = env.str(
-    "REAL_DATABASE_URL",
-    default="postgresql+asyncpg://parser:parser@0.0.0.0:5432/parser",
+REAL_DATABASE_URL = os.environ.get(
+    "ASYNC_DATABASE_URL",
+    default="postgresql+asyncpg://postgres:postgres@0.0.0.0:5432/postgres",
 )

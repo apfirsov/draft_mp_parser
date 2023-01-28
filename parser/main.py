@@ -3,6 +3,8 @@ from fastapi import FastAPI
 from fastapi.routing import APIRouter
 
 from api.handlers import parser_router
+import utilites
+import sys
 
 #########################
 # BLOCK WITH API ROUTES #
@@ -22,6 +24,25 @@ main_api_router.include_router(
 )
 app.include_router(main_api_router)
 
+def main():
+    func_name = sys.argv[1:]
+    
+    if func_name == "start_parsing":
+        print("Parsing !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+        utilites.parser.main()
+    else:
+        uvicorn.run(app, host="0.0.0.0", port=8000)
+
 if __name__ == "__main__":
-    # run app on the host and port
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    main()
+    
+
+
+# python main.py start_parsing
+# def start_parsing():
+#     """Triger for start parser"""
+#     name = sys.argv[1]
+#     f = globals().get(name)
+#     print(f)
+#     if f:
+#         utilites.parser.main()

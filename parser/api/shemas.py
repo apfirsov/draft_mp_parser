@@ -12,17 +12,8 @@ class TunedModel(BaseModel):
         orm_mode = True
 
 
-class ShowParser(TunedModel):
-    prod_id: int
-    name: str
-    category: str
-    price: int
-    rest_goods: int
-    link: str
-    seller: str
-
-
-class ParserCreate(BaseModel):
+# Изменить имя в зависимоти от архитектуры
+class ShowItem(TunedModel):
     prod_id: int
     name: str
     category: str

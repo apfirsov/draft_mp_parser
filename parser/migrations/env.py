@@ -1,7 +1,11 @@
+import os
 from logging.config import fileConfig
-
+from dotenv import load_dotenv
+from main import Base
 from alembic import context
 from sqlalchemy import engine_from_config, pool
+
+load_dotenv()
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
@@ -12,9 +16,13 @@ config = context.config
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
+# this will overwrite the ini-file sqlalchemy.url path
+# with the path given in the config of the main code
+config.set_main_option('sqlalchemy.url', os.environ.get("DATABASE_URL"))
+
 # add your model's MetaData object here
 # for 'autogenerate' support
-from main import Base
+
 
 target_metadata = Base.metadata
 # target_metadata = None

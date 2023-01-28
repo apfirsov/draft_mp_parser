@@ -8,8 +8,8 @@ from sqlalchemy.orm import declarative_base
 
 Base = declarative_base()
 
-
-class Parser(Base):
+# Изменить имя и содержание в зависимости от архитектуры
+class ParserItem(Base):
     __tablename__ = "parser"
 
     prod_id = Column(Integer, primary_key=True)

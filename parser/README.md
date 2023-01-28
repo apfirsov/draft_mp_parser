@@ -9,6 +9,10 @@ parser
 
 ```POSTGRES_PASSWORD=parser```
 
+```ASYNC_DATABASE_URL=postgresql+asyncpg://user_name:password@0.0.0.0:5432/db_name```
+
+```DATABASE_URL=postgresql://user_name:password@0.0.0.0:5432/db_name```
+
 Для накатывания миграций, если файла alembic.ini ещё нет, нужно запустить в терминале команду:
 
 ```

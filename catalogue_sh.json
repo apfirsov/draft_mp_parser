@@ -1,0 +1,32 @@
+[
+   {
+      "id": 63010,
+      "name": "Верхняя одежда",
+      "parent": 306,
+      "landing": null,
+      "seo": "Верхняя женская одежда",
+      "url": "/catalog/zhenshchinam/odezhda/verhnyaya-odezhda",
+      "shard": "outwear1",
+      "query": "cat=63010"
+   },
+   {
+      "id": 10471,
+      "name": "Офис",
+      "parent": 566,
+      "landing": null,
+      "seo": "Офисная одежда мужская",
+      "url": "/catalog/muzhchinam/ofis",
+      "shard": "men_clothes5",
+      "query": "cat=10471"
+   },
+   {
+      "id": 129019,
+      "name": "Посуда",
+      "parent": 128774,
+      "landing": null,
+      "seo": "Посуда для отдыха на природе",
+      "url": "/catalog/dom-i-dacha/otdyh-na-prirode/posuda",
+      "shard": "housecraft_bigroot",
+      "query": "cat=9205"
+   }
+]

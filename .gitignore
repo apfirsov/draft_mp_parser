@@ -139,3 +139,5 @@ dmypy.json
 
 .vscode/
 *.code-workspace
+
+goods_ids_list.json

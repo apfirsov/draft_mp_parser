@@ -1,14 +1,13 @@
 from django.contrib import admin
-from .models import CustomUser
+from .models import User
 
-@admin.register(CustomUser)
-class CustomUserAdmin(admin.ModelAdmin):
+
+@admin.register(User)
+class UserAdmin(admin.ModelAdmin):
     list_display = (
-        'login',
         'name',
         'date_joined',
         'status',
-        'search_history',
-        'visit_history',
+        'visit_time',
         'phone_number'
     )

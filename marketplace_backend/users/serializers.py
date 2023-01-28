@@ -1,23 +1,18 @@
 from rest_framework import serializers
 
-from phone_verify.serializers import SMSVerificationSerializer
-
-from .models import CustomUser
+from .models import User, Status
 
 
-class CustomUserSerializer(serializers.Serializer):
-    login = serializers.CharField(required=True)
+class CustomUserSerializer(serializers.ModelSerializer):
     name = serializers.CharField(required=True)
     phone_number = serializers.CharField(required=True)
     status = serializers.SerializerMethodField()
 
     class Meta:
-        model = CustomUser
+        model = User
         fields = '__all__'
 
     def get_status(self, obj):
-        return 'Registered'
-
-
-class CustomUserSMSSerializer(CustomUserSerializer, SMSVerificationSerializer):
-    pass
+        if self.context.get('request').user.is_anonymous:
+            return Status.objects.get(status='Unregistered')
+        return Status.objects.get(status='Registered')

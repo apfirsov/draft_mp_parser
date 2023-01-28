@@ -1,5 +1,3 @@
-from django.core.exceptions import ObjectDoesNotExist
-
 from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny
@@ -10,7 +8,7 @@ from phone_verify.models import SMSVerification
 from phone_verify import serializers as phone_serializers
 
 from . import serializers
-from .models import CustomUser
+from .models import User
 
 
 class CustomUserViewSet(VerificationViewSet):
@@ -25,7 +23,7 @@ class CustomUserViewSet(VerificationViewSet):
             data=request.data
         )
         serializer.is_valid(raise_exception=True)
-        user = CustomUser(**serializer.validated_data)
+        user = User(**serializer.validated_data)
         user.save()
         return Response(serializer.data)
 
@@ -35,8 +33,5 @@ class CustomUserViewSet(VerificationViewSet):
             data=request.data
         )
         phone_number = serializer.initial_data['phone_number']
-        try:
-            SMSVerification.objects.get(phone_number=phone_number).delete()
-        except ObjectDoesNotExist:
-            raise ObjectDoesNotExist('Object Does Not Exist')
+        SMSVerification.objects.get(phone_number=phone_number).delete()
         return Response(status=status.HTTP_204_NO_CONTENT)

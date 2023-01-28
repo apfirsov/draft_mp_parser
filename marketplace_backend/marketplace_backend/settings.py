@@ -1,8 +1,12 @@
+import os
 from pathlib import Path
+from dotenv import load_dotenv
+
+load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = 'django-insecure-%dq8t=u_6f8$pk0*)%%!eklj2cl^wz90!tq)p83vg%zbnf%=_%'
+SECRET_KEY = os.getenv('SECRET_KEY')
 
 DEBUG = True
 
@@ -72,7 +76,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'ru-ru'
 
 TIME_ZONE = 'UTC'
 
@@ -87,8 +91,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 PHONE_VERIFICATION = {
     "BACKEND": "phone_verify.backends.twilio.TwilioBackend",
     "OPTIONS": {
-        "SID": "AC63957cc81b56ac3164b3e9abeeaca257",
-        "SECRET": "4487829b8c0ae689a70218d0c1f8d7fb",
+        "SID": os.getenv('SID'),
+        "SECRET": os.getenv('SECRET'),
         "FROM": "+12055512820",
         "SANDBOX_TOKEN": "123456",
     },
@@ -98,3 +102,5 @@ PHONE_VERIFICATION = {
     "SECURITY_CODE_EXPIRATION_TIME": 3600,
     "VERIFY_SECURITY_CODE_ONLY_ONCE": True,
 }
+
+AUTH_USER_MODEL = 'users.User'

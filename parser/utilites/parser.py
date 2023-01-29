@@ -5,7 +5,7 @@ import time
 
 async def open_json():
     """Download file"""
-    with open("wb.json", "r") as file:
+    with open("utilites/wb.json", "r") as file:
         src = json.load(file)
     await asyncio.sleep(4)  # fat task
     print("open_json sleep 4 sec")
@@ -50,7 +50,4 @@ async def main():
     await asyncio.wait(task)
     print(f"Time of task {int(time.time() - start)} sec")
 
-# ioloop = asyncio.get_event_loop()
-# ioloop.run_until_complete(main())
-# ioloop.close()
 asyncio.run(main())

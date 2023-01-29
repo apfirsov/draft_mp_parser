@@ -7,5 +7,6 @@ router = DefaultRouter()
 router.register('phone', CustomUserViewSet, basename='phone')
 
 urlpatterns = [
+    path('api/v1/accounts/', include('allauth.urls')),
     path('api/v1/', include(router.urls))
 ]

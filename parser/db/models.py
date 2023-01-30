@@ -7,7 +7,7 @@ from sqlalchemy import (
     ForeignKey,
     Table
 )
-from sqlalchemy.orm import declarative_base, relationship, backref
+from sqlalchemy.orm import declarative_base, relationship
 
 ##############################
 # BLOCK WITH DATABASE MODELS #
@@ -17,46 +17,21 @@ from sqlalchemy.orm import declarative_base, relationship, backref
 Base = declarative_base()
 
 
-class Card_Colors(Base):
-    __tablename__ = 'cards_color'
-    id = Column(Integer, primary_key=True, unique=True)
-    color_id = Column(
-        "color_id",
-        Integer,
-        ForeignKey(
-            "Colors.id"
-        ),
-        primary_key=True
-    )
-    card_id = Column(
-        "card_id",
-        Integer,
-        ForeignKey(
-            "Goods_Cards.id"
-        ),
-        primary_key=True
-    )
-    color = relationship(
-        "Colors",
-        backref=backref(
-            "cards_color",
-            cascade="all, delete-orphan"
-        )
-    )
-    card = relationship(
-        "GoodsCards",
-        backref=backref(
-            "cards_color",
-            cascade="all, delete-orphan"
-        )
-    )
+cards_color = Table(
+    "cards_color",
+    Base.metadata,
+    Column("color_id", ForeignKey("Color.id"), primary_key=True),
+    Column("goods_id", ForeignKey("Goods_Cards.id"), primary_key=True),
+)
 
 
-class Colors(Base):
-    __tablename__ = "Colors"
-
-    id = Column("id", Integer, primary_key=True)
-    name = Column("name", String)
+cards_size = Table(
+    "cards_size",
+    Base.metadata,
+    Column("size_id", ForeignKey("Size.id"), primary_key=True),
+    Column("goods_id", ForeignKey("Goods_Cards.id"), primary_key=True),
+    Column("size_amount", Integer),
+)
 
 
 class Category(Base):
@@ -176,11 +151,31 @@ class GoodsCards(Base):
         Integer
     )
     colors = relationship(
-        "Colors",
-        secondary="cards_color"
+        "Color",
+        secondary=cards_color,
+        # back_populates="colors",
+        cascade="all, delete"
     )
-    # sizes = relationship(
-    #     "Sizes",
-    #     secondary=cards_size,
-    #     backref='Goods_Cards'
-    # )
+    sizes = relationship(
+        "Size",
+        secondary=cards_size,
+        # back_populates="sizes",
+        cascade="all, delete"
+    )
+
+
+class Color(Base):
+    __tablename__ = "Color"
+
+    id = Column("id", Integer, primary_key=True)
+    name = Column("name", String)
+    cards_id = Column("card_id", Integer, ForeignKey('Goods_Cards.id'))
+
+
+class Size(Base):
+    __tablename__ = "Size"
+
+    id = Column("id", Integer, primary_key=True)
+    name = Column("name", String)
+    # amount = Column("amount", Integer)
+    cards_id = Column("card_id", Integer, ForeignKey('Goods_Cards.id'))

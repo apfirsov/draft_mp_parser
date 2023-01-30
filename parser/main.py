@@ -17,8 +17,8 @@ main_api_router = APIRouter()
 # set routes to the app instance
 main_api_router.include_router(
     parser_router,
-    prefix="/parser",
-    tags=["parser"]
+    prefix="/api",
+    tags=["parserAPI"]
 )
 app.include_router(main_api_router)
 

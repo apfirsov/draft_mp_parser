@@ -1,9 +1,11 @@
+import asyncio
 import json
 import logging
 import sys
 import time
 
 import requests
+from constants import MAX_GOODS_IN_REQUEST
 
 handler = logging.StreamHandler(sys.stdout)
 formatter = logging.Formatter(
@@ -11,11 +13,8 @@ formatter = logging.Formatter(
 handler.setFormatter(formatter)
 
 logger = logging.getLogger(__name__)
-logger.setLevel(logging.DEBUG)
+logger.setLevel(logging.INFO)
 logger.addHandler(handler)
-
-MAX_GOODS_IN_REQUEST: int = 750
-CARDS: list = []
 
 
 def concatenate_ids(goods: dict) -> list[str]:
@@ -37,10 +36,9 @@ def concatenate_ids(goods: dict) -> list[str]:
     return concatenated_ids_list
 
 
-def get_cards(idx: int, string: str) -> None:
-    url: str = base_url + string
-    response: dict = requests.get(url).json()
-    products: list[dict] = response.get('data').get('products')
+async def collect_data(idx: int,
+                       products: list[dict],
+                       number_of_requests: int) -> None:
 
     for product in products:
         colors: list = [_.get('name') for _ in product.get('colors')]
@@ -68,32 +66,63 @@ def get_cards(idx: int, string: str) -> None:
             'price_with_discount': product.get('salePriceU'),
             'in_stock': qty,
             'rating': product.get('rating'),
+            'feedbacks': product.get('feedbacks'),
             'colors': colors,
             'sizes': sizes
         }
         CARDS.append(card)
 
-    logger.info('%d / %d requests done, got %d products',
+    logger.info('%d of %d response handled, got %d products',
                 idx, number_of_requests, len(CARDS))
 
 
-if __name__ == '__main__':
-    with open('goods_ids_list.json', 'r') as file:
-        goods: dict = json.load(file)
-
-    # предполагаем, что принадлежность товара к дереву каталога уже присвоена,
-    # поэтому просто беру все товары из goods_ids_list.json и иду по ним
-    concatenated_ids_list: list[str] = concatenate_ids(goods)
-
+async def get_response(idx, string, number_of_requests, tasks):
     base_url: str = ('https://card.wb.ru/cards/detail?spp=30&appType=1'
                      '&dest=-1029256,-102269,-1304596,-1281263&nm=')
+    url: str = base_url + string
+
+    response: dict = requests.get(url).json()
+    logger.info('got response from %d of %d requests', idx, number_of_requests)
+
+    products: list[dict] = response.get('data').get('products')
+
+    task = asyncio.create_task(
+        collect_data(
+            idx, products, number_of_requests), name="collect data")
+    tasks.append(task)
+
+
+async def main():
+    try:
+        with open('goods_ids_list.json', 'r') as file:
+            goods: dict = json.load(file)
+    except FileNotFoundError as error:
+        logger.error(error, exc_info=True)
+
+    concatenated_ids_list: list[str] = concatenate_ids(goods)
+
+    # для теста сокращаю количество запросов
+    concatenated_ids_list = concatenated_ids_list[:20]
 
     number_of_requests: int = len(concatenated_ids_list)
 
+    tasks = []
+    for idx, string in enumerate(concatenated_ids_list, 1):
+        task = asyncio.create_task(
+            get_response(idx, string, number_of_requests, tasks),
+            name="get response"
+        )
+        tasks.append(task)
+
+    await asyncio.wait(tasks)
+
+
+if __name__ == '__main__':
     start: float = time.time()
 
-    for idx, string in enumerate(concatenated_ids_list, 1):
-        get_cards(idx, string)
+    CARDS: list = []
+
+    asyncio.run(main())
 
     finish: float = time.time()
     impl_time: float = finish - start

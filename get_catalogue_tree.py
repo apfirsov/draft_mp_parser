@@ -1,8 +1,7 @@
-# скачивает основной многоуровневый каталог, убирает многоуровневость
-# и сохраняет в файл 'catalogue.json'
-
 import json
+
 import requests
+from constants import MAIN_MENU
 
 
 def get_catalogue_tree(dictionary: dict) -> None:
@@ -25,8 +24,7 @@ def get_catalogue_tree(dictionary: dict) -> None:
 
 if __name__ == '__main__':
     RESULT: list = []
-    catalogue_url: str = ('https://static-basket-01.wb.ru/vol0/'
-                          'data/main-menu-ru-ru-v2.json')
+    catalogue_url: str = MAIN_MENU
     response: dict = requests.get(catalogue_url).json()
 
     get_catalogue_tree(response)

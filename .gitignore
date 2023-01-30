@@ -141,3 +141,4 @@ dmypy.json
 *.code-workspace
 
 goods_ids_list.json
+product_cards.json

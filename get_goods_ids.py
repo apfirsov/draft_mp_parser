@@ -46,6 +46,7 @@ def main() -> None:
     # запросы отправляются повторно, но на этом этапе они фильтруются
     # по брендам, чтобы уменьшить количество товаров
     for item in FAT_PRICE_RANGES:
+        logger.debug('parsing by brand for %s %s, price range %s', *item)
         parse_by_brand(item_id, item)
 
 
@@ -117,9 +118,6 @@ def parse_by_brand(item_id: str, item: tuple):
     price_lmt: str
     shard, query, price_lmt = item
 
-    logger.debug('parsing by brand for %s %s, price range: %s',
-                 shard, query, price_lmt)
-
     base_url: str = (f'https://catalog.wb.ru/catalog/{shard}/catalog?appType=1'
                      f'&{query}&dest=-1029256,-102269,-1304596,-1281263'
                      f'{price_lmt}')
@@ -162,12 +160,12 @@ def parse_by_brand(item_id: str, item: tuple):
     # по всем страницам выдачи. Так как в запросе не более 20 брендов,
     # у которых не более 500 товаров, то ихне может быть более 10.000,
     # и проверку на "заполненность" последней страницы я не применяю
-    for string in concatenated_ids_list:
+    number_of_requests: int = len(concatenated_ids_list)
+    for idx, string in enumerate(concatenated_ids_list, 1):
         request_url: str = base_url + '&fbrand=' + string
-
-        logger.debug('start parsing concatenated_ids_list %s', request_url)
-
         parse_through_pages(item_id, request_url)
+
+        logger.debug('%d / %d requests done', idx, number_of_requests)
 
 
 def parse_through_pages(item_id: str, base_url: str) -> None:
@@ -211,7 +209,7 @@ if __name__ == '__main__':
         catalogue = json.load(file)
 
     for item in catalogue:
-        start = time.time()
+        start: float = time.time()
         shard: str = item.get('shard')
         query: str = item.get('query')
         item_id: str = item.get('id')
@@ -222,8 +220,8 @@ if __name__ == '__main__':
         if shard != 'blackhole':
             # точка входа - функция main
             main()
-        finish = time.time()
-        impl_time = (round(finish - start, 2))
+        finish: float = time.time()
+        impl_time: float = round(finish - start, 2)
         logger.info('parsed %s %s in %d seconds', shard, query, impl_time)
 
     # результат работы модуля - словарь RESULT, у которого ключи - айди

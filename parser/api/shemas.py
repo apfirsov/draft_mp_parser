@@ -1,5 +1,6 @@
 from pydantic import BaseModel
 from datetime import date
+from typing import List
 
 #########################
 # BLOCK WITH API MODELS #
@@ -15,7 +16,7 @@ class TunedModel(BaseModel):
 
 class ShowColor(TunedModel):
     id: int
-    name: str
+    name: str  # Color
 
 
 class ShowSize(TunedModel):
@@ -30,7 +31,7 @@ class ShowCategory(TunedModel):
     parent_id: int
     shard: str
     query: str
-    url: str
+    url: str  # HttpUrl
     children: bool
     goods_displayed: bool
 
@@ -54,5 +55,5 @@ class ShowGoodsCards(TunedModel):
     in_stock: int
     rating: int
     feedbacks: int
-    # colors: ShowColor
-    # sizes: ShowSize
+    colors: List[ShowColor]
+    # sizes: List[ShowSize]

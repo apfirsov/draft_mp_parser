@@ -7,12 +7,26 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from db.models import (
     Category,
     GoodsCatalogue,
-    GoodsCards
+    GoodsCards,
+    Color
 )
 
 ###########################################################
 # BLOCK FOR INTERACTION WITH DATABASE IN BUSINESS CONTEXT #
 ###########################################################
+
+
+class ColorsDLA:
+    """Data Access Layer for operating user info"""
+    def __init__(self, db_session: AsyncSession, card_id):
+        self.db_session = db_session
+        self.card_id = card_id
+
+    async def get_color(self) -> List[Color]:
+        query = await self.db_session.execute(
+            select(Color).filter(card_id=self.card_id)
+        )
+        return query.scalars().all()
 
 
 class GoodsCardsDLA:

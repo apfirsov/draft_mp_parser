@@ -13,7 +13,6 @@ class TunedModel(BaseModel):
         orm_mode = True
 
 
-# Изменить имя в зависимоти от архитектуры
 class ShowColor(TunedModel):
     id: int
     name: str
@@ -55,5 +54,5 @@ class ShowGoodsCards(TunedModel):
     in_stock: int
     rating: int
     feedbacks: int
-    colors: ShowColor
-    sizes: ShowSize
+    # colors: ShowColor
+    # sizes: ShowSize

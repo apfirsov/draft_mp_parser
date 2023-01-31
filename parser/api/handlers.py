@@ -2,12 +2,14 @@ from typing import List, Union
 
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
+from fastapi import HTTPException
 
 # from db.dals import ParserDAL
 # from db.models import ParserItem
 from db.session import get_db
 from db.dals import GoodsCardsDLA, GoodsCatalogueDLA, CategoryDLA
 from db.models import GoodsCards, GoodsCatalogue, Category
+from api.shemas import ShowGoodsCards
 
 #########################
 # BLOCK WITH API ROUTES #
@@ -16,22 +18,41 @@ from db.models import GoodsCards, GoodsCatalogue, Category
 parser_router = APIRouter()
 
 
-async def _get_all(user_id, db) -> Union[ShowUser, None]:
+async def _get_all(db) -> List[ShowGoodsCards]:
+    cards_list = []
     async with db as session:
         async with session.begin():
-            user_dal = UserDAL(session)
-            user = await user_dal.get_user_by_id(
-                user_id=user_id,
-            )
-            if user is not None:
-                return ShowUser(
-                    user_id=user.user_id,
-                    name=user.name,
-                    surname=user.surname,
-                    email=user.email,
-                    is_active=user.is_active,
-                )
+            cards_dal = GoodsCardsDLA(session)
+            cards_all = await cards_dal.get_all_items()
+            if cards_all is not None:
+                for cards in cards_all:
+                    cards_list.append(ShowGoodsCards(
+                            id=cards.id,
+                            catalogue_id=cards.catalogue_id,
+                            name=cards.name,
+                            brand=cards.brand,
+                            brand_id=cards.brand_id,
+                            sale=cards.sale,
+                            price_full=cards.price_full,
+                            price_with_discount=cards.price_with_discount,
+                            in_stock=cards.in_stock,
+                            rating=cards.rating,
+                            feedbacks=cards.feedbacks,
+                            # colors=cards.colors,
+                            # sizes=cards.sizes
+                        )
+                    )
+            return cards_list
 
+
+@parser_router.get("/all")
+async def get_all(db: AsyncSession = Depends(get_db)) -> List[ShowGoodsCards]:
+    user = await _get_all(db)
+    if user is None:
+        raise HTTPException(
+            status_code=404, detail=f"Not found."
+        )
+    return user
 
 @parser_router.get("/goods_cards")
 async def get_goods_cards(

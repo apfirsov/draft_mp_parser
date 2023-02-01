@@ -1,0 +1,12 @@
+[
+    {
+      "shard": "string",
+      "name": "string",
+      "query": "string",
+      "children": true,
+      "parent_id": 1,
+      "goods_displayed": true,
+      "id": 1,
+      "url": "string"
+    }
+  ]

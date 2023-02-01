@@ -1,0 +1,38 @@
+[
+    {
+        "name": "string",
+        "price": 0,
+        "prod_id": 0,
+        "link": "string",
+        "seller": "string",
+        "category": "string",
+        "rest_goods": 0
+    },
+    {
+        "name": "string",
+        "price": 0,
+        "prod_id": 1,
+        "link": "string",
+        "seller": "string",
+        "category": "string",
+        "rest_goods": 0
+    },
+    {
+        "name": "string",
+        "price": 0,
+        "prod_id": 2,
+        "link": "string",
+        "seller": "string",
+        "category": "string",
+        "rest_goods": 0
+    },
+    {
+        "name": "string",
+        "price": 0,
+        "prod_id": 3,
+        "link": "string",
+        "seller": "string",
+        "category": "string",
+        "rest_goods": 0
+    }
+]

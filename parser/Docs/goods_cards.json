@@ -1,0 +1,17 @@
+[
+    {
+      "id": 1,
+      "catalogue_id": 1,
+      "name": "string",
+      "brand": "string",
+      "brand_id": 1,
+      "sale": 1,
+      "price_full": 1,
+      "price_with_discount": 1,
+      "in_stock": 1,
+      "rating": 1,
+      "feedbacks": 1,
+      "colors": [],
+      "sizes": []
+    }
+  ]

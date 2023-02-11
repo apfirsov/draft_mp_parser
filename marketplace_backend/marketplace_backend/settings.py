@@ -20,13 +20,16 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    "phone_verify",
+    'phone_verify',
     'django.contrib.sites',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.vk',
     'allauth.socialaccount.providers.google',
+    'allauth.socialaccount.providers.yandex',
+    # 'allauth.socialaccount.providers.telegram',
+    'django_telegram_login',
     'users'
 ]
 
@@ -129,6 +132,9 @@ SOCIALACCOUNT_PROVIDERS = {
             'access_type': 'offline',
         },
         'OAUTH_PKCE_ENABLED': True,
+    },
+    'telegram': {
+        'TOKEN': '6175257585:AAHH9bZatZzUecvwJpXFvkEj19omImdRvik'
     }
 }
 
@@ -136,3 +142,7 @@ ACCOUNT_USER_MODEL_USERNAME_FIELD = 'phone_number'
 ACCOUNT_EMAIL_REQUIRED = False
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_AUTHENTICATION_METHOD = 'phone_number'
+
+TELEGRAM_BOT_NAME = os.getenv('TELEGRAM_BOT_NAME')
+TELEGRAM_BOT_TOKEN = os.getenv('TELEGRAM_BOT_TOKEN')
+TELEGRAM_LOGIN_REDIRECT_URL = os.getenv('TELEGRAM_LOGIN_REDIRECT_URL')
